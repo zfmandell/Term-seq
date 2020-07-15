@@ -2,7 +2,7 @@
 
 """
 runs python3
-requires BioPython
+requires BioPython v. 1.77
 requires numpy v. 1.19.0
 requires SciPy >= 0.11
 
