@@ -16,7 +16,7 @@ if you have a bam file, you can get a coverage file using
 bedtools  genomecov -d  -ibam file.bam -g ref.fai >file.cov
 
 output files are in bedgraph format placed in same directory as input files
-Run as : python positional_slope.py <plus/minus> (+optional -window_size x)
+Run as : positional_slope.py <plus/minus> (+optional -window_size x)
 """
 
 import argparse
