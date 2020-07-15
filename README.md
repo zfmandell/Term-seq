@@ -63,8 +63,12 @@ This will yield all 3' ends that have Cv values above threshold (-min_delta, def
 9) run rev_inverse.py
 rev_inverse.py (rev strand called 3' ends, output of step 8 rev.bedgraph) (output file inverse.rev.bedgraph)
 
+This will yield inversed (Cv values will be negative) .bedgraph file for rev strand 3' ends, used for IGV viewing
+
 10) run cat
 cat (fwd strand called 3' end file, output of step 8) (inverse rev strand called 3' end file, output of step 9) > (final 3' end file name .bedgraph)
+
+This will yield final 3' end file for analysis and viewing on IGV
 
 
 
