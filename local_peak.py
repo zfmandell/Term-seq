@@ -4,7 +4,7 @@
 runs python3
 requires BioPython v. 1.77
 requires numpy v. 1.19.0
-requires SciPy >= 0.11
+requires SciPy v. 1.5.1
 
 This program finds all local maxima Cv values from genome-wide Cv files via SciPy
 
