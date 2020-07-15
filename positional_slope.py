@@ -2,7 +2,7 @@
 
 """
 runs python3
-requires numpy
+requires numpy v. 1.19.0
 
 This program is used to find the Cv at each base position
 
