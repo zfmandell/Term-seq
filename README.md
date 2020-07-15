@@ -5,12 +5,7 @@ requires in total :
 
 (these are the versions of each package that I used, but other versions likely work too):
 
-Python 3.8.3 with associated modules: biopython v. 1.77, numpy v. 1.19.0, scipy v. 1.5.1
-Trimmomatic v. 0.38
-Cutadapt v. 1.16
-BWA-MEM v.0.7.12-r1034
-samtools v. 0.1.19-44428cd
-bedtools v. 2.26.0
+Python 3.8.3 (with associated modules: biopython v. 1.77, numpy v. 1.19.0, scipy v. 1.5.1), Trimmomatic v. 0.38, Cutadapt v. 1.16, BWA-MEM v.0.7.12-r1034, samtools v. 0.1.19-44428cd, bedtools v. 2.26.0
 
 to run :
 
