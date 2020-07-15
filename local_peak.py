@@ -17,7 +17,7 @@ python positional_slope.py <plus/minus> (+optional -window_size x)
 
 optionally returns a .fasta file, with sequences x nucleotides upstream of each peak, default length = 50
 returns bedgraph file containing all 3' ends that pass threshold for loading onto IGV
-Run as : python local_peak.py <plus/minus> (+optional -min_delta x) (+optional -fasta_out <true/false>) (+optional -fasta <.fasta file used for alignment>) (+optional -fasta_window x)
+Run as : local_peak.py <plus/minus> (+optional -min_delta x) (+optional -fasta_out <true/false>) (+optional -fasta <.fasta file used for alignment>) (+optional -fasta_window x)
 
 
 """
