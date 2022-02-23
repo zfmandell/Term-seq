@@ -47,13 +47,13 @@ This will get the coverage at each position in the genome
 positional_slope.py plus (+optional -window_size x) (run in directory with fwd strand .cov files)
 positional_slope.py minus (+optional -window_size x) (run in directory with rev strand .cov files)
 
-This will yield genome-wide Cv .bedgraph files for each strand
+This will yield genome-wide Cv .bedgraph files for each strand. can also run on an individual file (-file).
 
 8) run local_peak.py (custom python script #2)
-local_peak.py plus (+optional -min_delta x) (+optional -fasta_out <true/false>) (+optional -fasta <.fasta file used for alignment>) (+optional -fasta_window x) (run in directory with fwd strand .bedgraph files, output of step 7)
-local_peak.py minus (+optional -min_delta x) (+optional -fasta_out <true/false>) (+optional -fasta <.fasta file used for alignment>) (+optional -fasta_window x) (run in directory with rev strand .bedgraph files, output of step 7)
+local_peak.py plus (+optional -min_delta x, mutually exclusive paramter with -perc_delta) (+optional -perc_delta x, mutually exclusive paramter with -min_delta) (+optional -fasta_out <true/false>) (+optional -fasta <.fasta file used for alignment>) (+optional -fasta_window x) (run in directory with fwd strand .bedgraph files, output of step 7, or provide -file)
+local_peak.py minus (+optional -min_delta x, mutually exclusive paramter with -perc_delta) (+optional -perc_delta x, mutually exclusive paramter with -min_delta) (+optional -fasta_out <true/false>) (+optional -fasta <.fasta file used for alignment>) (+optional -fasta_window x) (run in directory with fwd strand .bedgraph files, output of step 7, or provide -file)
 
-This will yield all 3' ends that have Cv values above threshold (-min_delta, default = 10) for each strand
+This will yield all 3' ends that have Cv values above threshold (-min_delta, default = 10, -perc_delta no default) for each strand. Must choose whether to threshold based on a minimum delta value or by percentile. can also run on an individual file (-file).
 
 9) run rev_inverse.py
 rev_inverse.py (rev strand called 3' ends, output of step 8 rev.bedgraph) (output file inverse.rev.bedgraph)
