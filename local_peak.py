@@ -2,9 +2,9 @@
 
 """
 runs python3
-requires biopython (I used v. 1.77)
-requires numpy (I used v. 1.19.0)
-requires scipy (I used v. 1.5.1)
+requires BioPython
+requires numpy
+requires SciPy >= 0.11
 
 This program finds all local maxima Cv values from genome-wide Cv files via SciPy
 
@@ -17,7 +17,7 @@ python positional_slope.py <plus/minus> (+optional -window_size x)
 
 optionally returns a .fasta file, with sequences x nucleotides upstream of each peak, default length = 50
 returns bedgraph file containing all 3' ends that pass threshold for loading onto IGV
-Run as : local_peak.py <plus/minus> (+optional -min_delta x) (+optional -fasta_out <true/false>) (+optional -fasta <.fasta file used for alignment>) (+optional -fasta_window x)
+Run as : python local_peak.py <plus/minus> (+optional -min_delta x) (+optional -fasta_out <true/false>) (+optional -fasta <.fasta file used for alignment>) (+optional -fasta_window x)
 
 
 """
@@ -26,7 +26,6 @@ import argparse
 import glob
 from Bio import SeqIO
 from Bio.Seq import Seq
-from Bio.Alphabet import IUPAC
 import numpy as np
 from scipy.signal import argrelextrema
 import operator
@@ -70,10 +69,15 @@ def local_max(delta_list,positions):
         peak_dict[positions[item]] = delta_list[item]
     return peak_dict
 
-def writer(genome,peak_dict,fyle,window,min_delta,strand,fasta):
+def writer(genome,peak_dict,fyle,window,min_delta,perc_delta,strand,fasta):
     #creates output bedgraph 3' end file based on threshold and option .fasta file with sequence upstream of each 3' end
 
-    sorted_peaks = [x for x in sorted(peak_dict.items(), key=operator.itemgetter(0)) if x[1] >= min_delta]
+    if perc_delta != None:
+        peaks_all = [np.log10(x) for x in peak_dict.values()]
+        perc = 10**np.percentile(peaks_all,perc_delta)
+        sorted_peaks = [x for x in sorted(peak_dict.items(), key=operator.itemgetter(0)) if x[1] >= perc]
+    else:
+        sorted_peaks = [x for x in sorted(peak_dict.items(), key=operator.itemgetter(0)) if x[1] >= min_delta]
 
     if fasta.lower() == 'true':
         new_name_fasta = str(window)+"nt_"+str(fyle[:-9])+".fasta"
@@ -119,6 +123,7 @@ def main():
     parser = argparse.ArgumentParser(description='determines all Cv local maxima, outputs bedgraph file and optional .fasta file')
     parser.add_argument('strand',type=str,help='specify strand: <plus/minus>')
     parser.add_argument('-min_delta',type=int,default=10,help='min delta for thresholding Cv values, default value = 10')
+    parser.add_argument('-perc_delta',type=float,default= None,help='min Cv percentile (based on log10 transformed set of values) for thresholding Cv values')
     parser.add_argument('-fasta_out',type=str,default='false',help='whether program outputs .fasta file  containing sequences upstream of all called 3-OH ends <true/false> default = false')
     parser.add_argument('-fasta',type=str,help='.fasta file used for alignment, only needed if -fasta_out = true')
     parser.add_argument('-fasta_window',type=int,default=50,help='length of upstream sequences in .fasta output file, default = 50, , only needed if -fasta_out = true')
@@ -133,13 +138,12 @@ def main():
             sub_data = read_coverage(args.file)
             positions = read_position(args.file)
             peaks = local_max(sub_data,positions)
-            writer(genome,peaks,args.file,args.fasta_window,args.min_delta,args.strand,args.fasta_out)
+            writer(genome,peaks,args.file,args.fasta_window,args.min_delta,args.perc_delta,args.strand,args.fasta_out)
         else:
-            for fyle in sorted(glob.glob('*.bedgraph')):
-                sub_data = read_coverage(args.file)
-                positions = read_position(args.file)
-                peaks = local_max(sub_data,positions)
-                writer('false',peaks,args.file,'false',args.min_delta,args.strand,'false')
+            sub_data = read_coverage(args.file)
+            positions = read_position(args.file)
+            peaks = local_max(sub_data,positions)
+            writer('false',peaks,args.file,'false',args.min_delta,args.perc_delta,args.strand,'false')
 
     else:
         if args.fasta_out.lower() == 'true':
@@ -148,13 +152,13 @@ def main():
                 sub_data = read_coverage(fyle)
                 positions = read_position(fyle)
                 peaks = local_max(sub_data,positions)
-                writer(genome,peaks,fyle,args.fasta_window,args.min_delta,args.strand,args.fasta_out)
+                writer(genome,peaks,fyle,args.fasta_window,args.min_delta,args.perc_delta,args.strand,args.fasta_out)
         else:
             for fyle in sorted(glob.glob('*.bedgraph')):
                 sub_data = read_coverage(fyle)
                 positions = read_position(fyle)
                 peaks = local_max(sub_data,positions)
-                writer('false',peaks,fyle,'false',args.min_delta,args.strand,'false')
+                writer('false',peaks,fyle,'false',args.min_delta,args.perc_delta,args.strand,'false')
 
 if __name__ == '__main__':
     main()
