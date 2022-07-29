@@ -65,6 +65,8 @@ cat (fwd strand called 3' end file, output of step 8) (inverse rev strand called
 
 This will yield final 3' end file for analysis and viewing on IGV
 
+Calculate %T for all 3' ends identified in two biological conditions and threshold based on calculated %T value using TE_calc.py
+
 
 
 
