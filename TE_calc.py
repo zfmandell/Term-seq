@@ -50,20 +50,20 @@ def read_ends(fyle):
 	return return_dict
 
 def main():
-	parser = argparse.ArgumentParser(description='for all 3-OH ends in a CSV, calculates %Ts in 2 biological conditions.\nOnly outputs ends with %T above threshold in both conditions.')
+	parser = argparse.ArgumentParser(description='for all 3-OH ends in a CSV, calculates TE in 2 biological conditions. Only outputs ends with %T above threshold in the WT strain.')
 	parser.add_argument('ends',type=str,help='CSV of 3-OH ends')
-	parser.add_argument('threshold',type=str,help='%T threshold, must be positive integer')
-	parser.add_argument('WT_fwd',type=str,help='fwd cov file of WT strain')
-	parser.add_argument('WT_rev',type=str,help='rev cov file of WT strain')
-	parser.add_argument('Mutant_fwd',type=str,help='fwd cov file of Mutant strain')
-	parser.add_argument('Mutant_rev',type=str,help='rev cov file of Mutant strain')
-	parser.add_argument('upstream',type=int,help='upstream distance (nt) for %T calc, must be positive intenger')
-	parser.add_argument('downstream',type=int,help='downstream distance (nt) for %T calc, must be positive intenger')
+	parser.add_argument('threshold',type=int,help='TE threshold, must be positive integer')
+	parser.add_argument('WT_fwd',type=str,help='fwd cov file of WT strain [.cov]')
+	parser.add_argument('WT_rev',type=str,help='rev cov file of WT strain [.cov]')
+	parser.add_argument('Mutant_fwd',type=str,help='fwd cov file of Mutant strain [.cov]')
+	parser.add_argument('Mutant_rev',type=str,help='rev cov file of Mutant strain [.cov]')
+	parser.add_argument('upstream',type=int,help='upstream distance (nt) for TE calc, must be positive intenger')
+	parser.add_argument('downstream',type=int,help='downstream distance (nt) for TE calc, must be positive intenger')
 	parser.add_argument('output',type=str,help='')
 
 	args = parser.parse_args()
 
-	ends = read_terms(args.terms)
+	ends = read_ends(args.ends)
 	WT_fwd = read_coverage(args.WT_fwd)
 	WT_rev = read_coverage(args.WT_rev)
 	Mutant_fwd = read_coverage(args.Mutant_fwd)
@@ -73,7 +73,7 @@ def main():
 	for key,value in ends.items():
 		if value == '+':
 			TE_WT = TE_calc(key,WT_fwd,'+',args.upstream,args.downstream)
-			TE_Mutant = TE_calc(key,Mutant_fwd,'+,'args.upstream,args.downstream)
+			TE_Mutant = TE_calc(key,Mutant_fwd,'+',args.upstream,args.downstream)
 			
 			if TE_WT != None and TE_Mutant != None:
 				if TE_WT >= args.threshold:
@@ -93,6 +93,7 @@ def main():
 		for item in final_list_sorted:
 			outp.write(','.join(list(map(str,item)))+'\n')
 
+		
 if __name__ == '__main__':
 	main()
 
